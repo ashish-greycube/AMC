@@ -133,17 +133,20 @@ app_license = "mit"
 # 	"ToDo": "custom_app.overrides.CustomToDo"
 # }
 
+# After Migrate Events
+after_migrate = ["amc.migrate.after_migrate"]
+
 # Document Events
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+        "Maintenance Schedule": {
+                "on_submit": "amc.api.create_docs_on_submit",
+                "on_cancel" : "amc.api.delete_docs_on_cancel",
+                "before_save" : "amc.api.validate_sales_person",
+	}
+}
 
 # Scheduled Tasks
 # ---------------
