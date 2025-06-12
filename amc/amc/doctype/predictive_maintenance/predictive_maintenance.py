@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class AMCSchedule(Document):
+class PredictiveMaintenance(Document):
 	pass

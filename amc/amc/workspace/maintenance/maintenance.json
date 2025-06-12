@@ -45,15 +45,15 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "AMC Schedule",
+   "label": "Predictive Maintenance",
    "link_count": 0,
-   "link_to": "AMC Schedule",
+   "link_to": "Predictive Maintenance",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
   }
  ],
- "modified": "2025-06-10 11:46:56.000035",
+ "modified": "2025-06-12 10:45:33.178068",
  "modified_by": "Administrator",
  "module": "Amc",
  "name": "Maintenance",

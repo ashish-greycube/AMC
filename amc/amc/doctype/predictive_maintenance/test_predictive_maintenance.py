@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestAMCSchedule(FrappeTestCase):
+class TestPredictiveMaintenance(FrappeTestCase):
 	pass

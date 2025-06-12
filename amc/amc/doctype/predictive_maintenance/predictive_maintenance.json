@@ -16,7 +16,8 @@
   "customer",
   "completion_status",
   "column_break_nijc",
-  "subject"
+  "subject",
+  "customer_email"
  ],
  "fields": [
   {
@@ -83,15 +84,22 @@
    "fieldtype": "Small Text",
    "label": "Subject",
    "read_only": 1
+  },
+  {
+   "fieldname": "customer_email",
+   "fieldtype": "Data",
+   "label": "Customer Email",
+   "options": "Email",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-10 12:02:33.006702",
+ "modified": "2025-06-12 13:26:43.479426",
  "modified_by": "Administrator",
  "module": "Amc",
- "name": "AMC Schedule",
+ "name": "Predictive Maintenance",
  "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [

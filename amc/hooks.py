@@ -142,10 +142,13 @@ after_migrate = ["amc.migrate.after_migrate"]
 
 doc_events = {
         "Maintenance Schedule": {
-                "on_submit": "amc.api.create_docs_on_submit",
+                "on_submit": ["amc.api.create_docs_on_submit", "amc.api.set_sales_order"],
                 "on_cancel" : "amc.api.delete_docs_on_cancel",
-                "before_save" : "amc.api.validate_sales_person",
-	}
+                "before_save" : ["amc.api.validate_sales_person", "amc.api.validate_occurance"]
+	},
+        "Maintenance Visit" : {
+            'validate' :  "amc.api.set_sales_order_in_ms_visit"
+        }
 }
 
 # Scheduled Tasks

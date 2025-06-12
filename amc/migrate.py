@@ -18,11 +18,33 @@ def after_migrate():
             {
                 'fieldname': 'custom_amc_schedule_reference',
                 'fieldtype': 'Data',
-                'label': _('AMC Schedule Reference'),
+                'label': _('Predictive Maintenance Reference'),
                 'insert_after' : 'item_reference',
                 'is_system_generated' : 0,
                 'is_custom_field': 1,
                 'read_only': 1,
+            },
+        ],
+
+        "Maintenance Schedule": [
+            {
+                'fieldname': 'sales_order_cf',
+                'fieldtype': 'Link',
+                'label' : _('Sales Order'),
+                'is_system_generated' : 0,
+                'is_custom_field': 1,
+                'read_only': 1,
+                'options' : 'Sales Order',
+                'insert_after' : 'company'
+            },
+            {
+                'fieldname': 'custom_customer_email',
+                'fieldtype': 'Data',
+                'label' : _('Customer Email'),
+                'is_system_generated' : 0,
+                'is_custom_field': 1,
+                'options' : 'Email',
+                'insert_after' : 'customer'
             }
         ],
 
@@ -93,16 +115,7 @@ def after_migrate():
                 'insert_after' : 'custom_abnormality',
                 'options' : '\nVery Poor\nPoor\nAverage\nGood\nExcellent',
                 'reqd' : 1
-            }, 
-            {
-                'fieldname': 'custom_customer_feedback',
-                'fieldtype': 'Small Text',
-                'label': _('Customer Feedback(In Words)'),
-                'is_system_generated' : 0,
-                'is_custom_field': 1,
-                'insert_after' : 'custom_rating_by_customer',
-                'reqd' : 1
-            }, 
+            },  
             {
                 'fieldname': 'custom_signature_block',
                 'fieldtype': 'Section Break',
@@ -155,6 +168,18 @@ def after_migrate():
                 'insert_after' : 'custom_customer_representative',
                 'reqd' : 1
             },
+        ],
+        
+        "Item" : [
+            {
+                'fieldname' : 'custom_allowed_simultaneous_occurance',
+                'fieldtype' : 'Int',
+                'label' : _('Allowed Simultaneous Occurance'),
+                'is_system_generated' : 0,
+                'is_custom_field': 1,
+                'insert_after' : 'stock_uom',
+                'default' : 0
+            }
         ]
     }
 
