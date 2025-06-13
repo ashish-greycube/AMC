@@ -147,7 +147,8 @@ doc_events = {
                 "before_save" : ["amc.api.validate_sales_person", "amc.api.validate_occurance"]
 	},
         "Maintenance Visit" : {
-            'validate' :  "amc.api.set_sales_order_in_ms_visit"
+            'validate' :  "amc.api.set_sales_order_in_ms_visit",
+            'before_save': 'amc.api.set_item_qty_in_mv',
         }
 }
 

@@ -95,4 +95,15 @@ def set_sales_order_in_ms_visit(self, method=None):
             for purpose in self.purposes:
                 purpose.prevdoc_doctype = 'Sales Order'
                 purpose.prevdoc_docname = so
+
+def set_item_qty_in_mv(self, method=None):
+    ms = self.maintenance_schedule 
+    if ms != None:
+        ms_doc = frappe.get_doc('Maintenance Schedule', ms)
+
+    if len(self.purposes) > 0:
+        for purpose in self.purposes:
+            for item in ms_doc.items:
+                if purpose.item_code == item.item_code:
+                    purpose.qty = item.qty
     

@@ -24,6 +24,18 @@ def after_migrate():
                 'is_custom_field': 1,
                 'read_only': 1,
             },
+            
+        ],
+
+        "Maintenance Schedule Item" : [
+            {
+                'fieldname': 'qty',
+                'fieldtype': 'Float',
+                'label': _('Quantity'),
+                'insert_after' : 'end_date',
+                'is_system_generated' : 0,
+                'is_custom_field': 1,
+            }
         ],
 
         "Maintenance Schedule": [
