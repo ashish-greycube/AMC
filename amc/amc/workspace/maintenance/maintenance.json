@@ -53,7 +53,7 @@
    "type": "Link"
   }
  ],
- "modified": "2025-06-12 10:45:33.178068",
+ "modified": "2025-06-16 16:29:22.019776",
  "modified_by": "Administrator",
  "module": "Amc",
  "name": "Maintenance",
@@ -70,7 +70,7 @@
    "doc_view": "List",
    "label": "MS Calender View",
    "type": "URL",
-   "url": "http://127.0.0.1:8000/app/amc-schedule/view/calendar/Maintenance%20Schedule%20View"
+   "url": "http://127.0.0.1:8000/app/predictive-maintenance/view/calendar/default"
   }
  ],
  "title": "Maintenance"

@@ -144,11 +144,10 @@ doc_events = {
         "Maintenance Schedule": {
                 "on_submit": ["amc.api.create_docs_on_submit", "amc.api.set_sales_order"],
                 "on_cancel" : "amc.api.delete_docs_on_cancel",
-                "before_save" : ["amc.api.validate_sales_person", "amc.api.validate_occurance"]
+                "before_save" : ["amc.api.validate_occurance", "amc.api.set_qty_in_ms_schedule"],
 	},
         "Maintenance Visit" : {
             'validate' :  "amc.api.set_sales_order_in_ms_visit",
-            'before_save': 'amc.api.set_item_qty_in_mv',
         }
 }
 

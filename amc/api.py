@@ -27,36 +27,7 @@ def delete_docs_on_cancel(self, method=None):
             if schedule.custom_amc_schedule_reference != None:
                 frappe.delete_doc('Predictive Maintenance', schedule.custom_amc_schedule_reference)
            
-
-# Function for Validating Sales Person
-def validate_sales_person(self, method=None):
-    schedules_list = self.schedules
-    if len(schedules_list) > 0:
-        for schedule in schedules_list:
-            start_date = schedule.scheduled_date
-            end_date = schedule.custom_scheduled_end_date
-
-            sales_persons = frappe.db.sql(f'''
-                SELECT 
-                    DISTINCT(tmsd.sales_person)
-                FROM 
-                    `tabMaintenance Schedule Detail` tmsd
-                WHERE 
-                    (((tmsd.scheduled_date  BETWEEN "{start_date}" AND "{end_date}") OR (tmsd.custom_scheduled_end_date BETWEEN "{start_date}" AND "{end_date}"))AND tmsd.docstatus = 1)
-                OR 
-                    ((tmsd.custom_scheduled_end_date >= "{start_date}") AND (tmsd.custom_scheduled_end_date <= "{end_date}") AND tmsd.docstatus = 1)
-                OR 
-                    ((tmsd.scheduled_date <= "{end_date}") AND (tmsd.scheduled_date >= "{start_date}") AND tmsd.docstatus = 1)
-                OR 
-                    ((tmsd.scheduled_date <= "{start_date}" AND tmsd.custom_scheduled_end_date >= "{end_date}") AND tmsd.docstatus = 1) ORDER BY parent;
-            ''', as_dict = 1)
-            
-            if len(sales_persons) > 0:
-                for sp in sales_persons:
-                    if sp.sales_person == schedule.sales_person:
-                        frappe.throw("Sales person {0} is not available between {1} to {2}".format(frappe.bold(schedule.sales_person), start_date, end_date))
-
-
+# Function for equipement validation (Item-Date Pair)
 def validate_occurance(self, method=None):
     schedules_list = self.schedules
     if len(schedules_list) > 0:
@@ -82,12 +53,13 @@ def validate_occurance(self, method=None):
                 if current_total_pairs >= current_allowed_occurance:
                     frappe.throw("Only {0} Simultaneous Occurance are allowed for Item {1}".format(current_allowed_occurance, frappe.bold(schedule.item_code)))
 
+# Function for set SO in Maintenance Schedule at Parent Level 
 def set_sales_order(self, method=None):
     if len(self.items) > 0:
         sales_order = self.items[0].sales_order
-    # frappe.db.set_value('Maintenance Schedule', self.name, 'sales_order_cf', sales_order)
     self.sales_order_cf = sales_order
 
+# Function for set SO in Maintenance Visit
 def set_sales_order_in_ms_visit(self, method=None):
     if self.sales_order_cf:
         so = self.sales_order_cf
@@ -95,15 +67,12 @@ def set_sales_order_in_ms_visit(self, method=None):
             for purpose in self.purposes:
                 purpose.prevdoc_doctype = 'Sales Order'
                 purpose.prevdoc_docname = so
-
-def set_item_qty_in_mv(self, method=None):
-    ms = self.maintenance_schedule 
-    if ms != None:
-        ms_doc = frappe.get_doc('Maintenance Schedule', ms)
-
-    if len(self.purposes) > 0:
-        for purpose in self.purposes:
-            for item in ms_doc.items:
-                if purpose.item_code == item.item_code:
-                    purpose.qty = item.qty
     
+# Function for set qty in MS Schedule Table
+def set_qty_in_ms_schedule(self, method=None):
+    if len(self.items) > 0:
+        for item in self.items:
+            for schedule in self.schedules:
+                if schedule.item_code == item.item_code:
+                    if schedule.qty == 0:
+                        schedule.qty = item.qty
