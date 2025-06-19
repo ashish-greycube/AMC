@@ -18,7 +18,11 @@
   "completion_status",
   "column_break_nijc",
   "subject",
-  "customer_email"
+  "customer_email",
+  "section_break_ehfz",
+  "contact_person",
+  "mobile_no",
+  "contact_email"
  ],
  "fields": [
   {
@@ -98,12 +102,36 @@
    "fieldtype": "Data",
    "label": "Description",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_ehfz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "contact_person",
+   "fieldtype": "Link",
+   "label": "Contact Person",
+   "options": "Contact",
+   "read_only": 1
+  },
+  {
+   "fieldname": "mobile_no",
+   "fieldtype": "Data",
+   "label": "Mobile No",
+   "options": "Phone",
+   "read_only": 1
+  },
+  {
+   "fieldname": "contact_email",
+   "fieldtype": "Data",
+   "label": "Contact Email",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-19 10:50:55.241004",
+ "modified": "2025-06-19 12:12:11.388460",
  "modified_by": "Administrator",
  "module": "Amc",
  "name": "Predictive Maintenance",
