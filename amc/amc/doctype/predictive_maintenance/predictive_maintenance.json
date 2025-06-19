@@ -8,6 +8,7 @@
  "field_order": [
   "item_code",
   "item_name",
+  "description",
   "column_break_fdjh",
   "scheduled_date",
   "scheduled_end_date",
@@ -91,12 +92,18 @@
    "label": "Customer Email",
    "options": "Email",
    "read_only": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-16 16:24:48.937121",
+ "modified": "2025-06-19 10:50:55.241004",
  "modified_by": "Administrator",
  "module": "Amc",
  "name": "Predictive Maintenance",
