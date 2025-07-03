@@ -31,7 +31,25 @@ def after_migrate():
                 'insert_after' : 'item_name',
                 'is_custom_field' : 1,
                 'is_system_generated' : 0,
-            }
+            },
+            {
+                'fieldname' : 'update_btn',
+                'fieldtype' : 'Button',
+                'label' : _('Update'),
+                'insert_after' : 'custom_amc_schedule_reference',
+                'is_custom_field' : 1,
+                'is_system_generated' : 0,
+                'depends_on': 'eval:doc.actual_date==null && doc.docstatus==1;'
+            },
+            {
+                'fieldname' : 'custom_reschedule_reason',
+                'fieldtype' : 'Small Text',
+                'label' : _('Reschedule Reason'),
+                'insert_after' : 'actual_date',
+                'is_custom_field' : 1,
+                'is_system_generated' : 0,
+                'allow_on_submit' : 1,
+            },
         ],
 
         "Maintenance Schedule Item" : [
@@ -64,6 +82,15 @@ def after_migrate():
                 'is_custom_field': 1,
                 'options' : 'Email',
                 'insert_after' : 'customer'
+            },
+            {
+                'fieldname': 'custom_branch',
+                'fieldtype': 'Link',
+                'label' : _('Branch'),
+                'is_system_generated' : 0,
+                'is_custom_field': 1,
+                'options' : 'Branch',
+                'insert_after' : 'transaction_date'
             }
         ],
 
@@ -198,6 +225,35 @@ def after_migrate():
                 'is_custom_field': 1,
                 'insert_after' : 'stock_uom',
                 'default' : 0
+            },
+            {
+                'fieldname' : 'custom_sb_branchs',
+                'fieldtype' : 'Section Break',
+                'label' : _('Equipement Occurance'),
+                'is_system_generated' : 0,
+                'is_custom_field': 1,
+                'insert_after' : 'brand',
+                'collapsible' : 1
+            },
+            {
+                'fieldname' : 'custom_equipement_occurence',
+                'fieldtype' : 'Table',
+                'label' : _('Branch and Equipement Occurence'),
+                'is_system_generated' : 0,
+                'is_custom_field': 1,
+                'insert_after' : 'custom_sb_branchs',
+                'options' : 'Branch Wise Equipment Occurrence',
+            }
+        ],
+
+        "Issue": [
+            {
+                'fieldname': 'custom_customer_representative',
+                'fieldtype': 'Data',
+                'label' : _('Customer Representative'),
+                'is_custom_field': 1,
+                'is_system_generated' : 0,
+                'insert_after' : 'customer_feedback_cf',
             }
         ]
     }
