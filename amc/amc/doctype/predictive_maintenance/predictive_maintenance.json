@@ -12,6 +12,7 @@
   "column_break_fdjh",
   "scheduled_date",
   "scheduled_end_date",
+  "qty",
   "section_break_nzzw",
   "sales_person",
   "customer",
@@ -156,12 +157,18 @@
    "label": "Sales Person Email",
    "options": "Email",
    "read_only": 1
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Int",
+   "label": "Qty",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-02 13:03:01.406017",
+ "modified": "2025-07-03 14:36:42.547481",
  "modified_by": "Administrator",
  "module": "Amc",
  "name": "Predictive Maintenance",

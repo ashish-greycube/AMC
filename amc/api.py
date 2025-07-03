@@ -27,6 +27,7 @@ def create_docs_on_submit(self, method=None):
             sd_doc.sales_order_reference = self.sales_order_cf
             sd_doc.maintenance_schedule_reference = self.name
             sd_doc.sales_person_email = sp_email
+            sd_doc.qty = schedule.qty
             sd_doc.insert(ignore_permissions=True)
         
             frappe.db.set_value('Maintenance Schedule Detail', schedule.name, 'custom_amc_schedule_reference', sd_doc.name)
