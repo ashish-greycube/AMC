@@ -20,7 +20,7 @@ def create_docs_on_submit(self, method=None):
             sd_doc.completion_status = schedule.completion_status
             sd_doc.subject = "{0} - {1}".format(self.customer_name, schedule.item_name,)
             sd_doc.customer_email = self.custom_customer_email
-            sd_doc.description = schedule.custom_remark
+            sd_doc.description = schedule.custom_remark or ""
             sd_doc.contact_person = self.contact_person
             sd_doc.mobile_no = self.contact_mobile
             sd_doc.contact_email = self.contact_email
@@ -141,8 +141,10 @@ def update_predictive_data_after_submit(doctype, docname, predictive_doc, resche
         '''.format(item_code, updated_schedule_date, updated_scheduled_end_date, branch, parent)
     , as_dict = 1)
     current_total_pairs = len(pairs)
-
-    if current_total_pairs >= current_allowed_occurance:
+    
+    if current_allowed_occurance == None:
+        frappe.throw("Occurance value is not set in Item {0}".format(frappe.bold(item_code)))
+    elif current_total_pairs >= current_allowed_occurance:
         frappe.throw("Simultaneous Occurrence for Item {0} Exceeds Permitted Occurence {1}".format(frappe.bold(item_code), current_allowed_occurance))
     else:
         # Updating Child Table Data
@@ -153,3 +155,36 @@ def update_predictive_data_after_submit(doctype, docname, predictive_doc, resche
         # Updating Predictive Maintenance Data
         frappe.db.set_value('Predictive Maintenance', predictive_doc, 'scheduled_date', updated_schedule_date)
         frappe.db.set_value('Predictive Maintenance', predictive_doc, 'scheduled_end_date', updated_scheduled_end_date)
+
+@frappe.whitelist()
+@frappe.validate_and_sanitize_search_inputs
+def get_contact_person_query(doctype, txt, searchfield, start, page_len, filters):
+    data = frappe.db.sql(
+        '''
+    	SELECT tdl.parent 
+        FROM tabCustomer tc
+        INNER JOIN `tabDynamic Link` tdl 
+        ON tc.name = tdl.link_name 
+        WHERE tdl.link_doctype  = "Customer" 
+        AND tdl.parenttype = "Contact"
+        AND tc.name = "{0}"
+        AND tdl.parent like %(txt)s
+        '''.format(filters.get('customer')), {"txt": "%%%s%%" % txt}
+    )
+    return data
+
+@frappe.whitelist()
+def update_contact_in_pm(parent, new_contact_person, new_contact_phone, new_contact_email):
+    # Updating Details in MS
+    frappe.db.set_value('Maintenance Schedule', parent, 'contact_person', new_contact_person)
+    frappe.db.set_value('Maintenance Schedule', parent, 'contact_mobile', new_contact_phone)
+    frappe.db.set_value('Maintenance Schedule', parent, 'contact_email', new_contact_email)
+
+    # Updating Details in PM
+    predictive_docs = frappe.db.get_all('Predictive Maintenance', {'maintenance_schedule_reference' : parent}, ['name'])
+    if len(predictive_docs) > 0:
+        for pd in predictive_docs:
+            docname = pd['name']
+            frappe.db.set_value('Predictive Maintenance', docname, 'contact_person', new_contact_person)
+            frappe.db.set_value('Predictive Maintenance', docname, 'mobile_no', new_contact_phone)
+            frappe.db.set_value('Predictive Maintenance', docname, 'contact_email', new_contact_email)

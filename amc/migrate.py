@@ -43,12 +43,13 @@ def after_migrate():
             },
             {
                 'fieldname' : 'custom_reschedule_reason',
-                'fieldtype' : 'Small Text',
+                'fieldtype' : 'Link',
                 'label' : _('Reschedule Reason'),
                 'insert_after' : 'actual_date',
                 'is_custom_field' : 1,
                 'is_system_generated' : 0,
                 'allow_on_submit' : 1,
+                'options': 'TIEPL Reschedule Reason'
             },
         ],
 
