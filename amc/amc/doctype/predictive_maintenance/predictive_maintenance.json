@@ -17,6 +17,7 @@
   "sales_person",
   "customer",
   "completion_status",
+  "color",
   "column_break_nijc",
   "sales_person_email",
   "subject",
@@ -27,7 +28,8 @@
   "contact_email",
   "column_break_rpjp",
   "sales_order_reference",
-  "maintenance_schedule_reference"
+  "maintenance_schedule_reference",
+  "maintenance_schedule_item_reference"
  ],
  "fields": [
   {
@@ -76,13 +78,6 @@
    "fieldtype": "Link",
    "label": "Customer",
    "options": "Customer",
-   "read_only": 1
-  },
-  {
-   "fieldname": "completion_status",
-   "fieldtype": "Select",
-   "label": "Completion Status",
-   "options": "\nPending\nPartially Completed\nFully Completed",
    "read_only": 1
   },
   {
@@ -163,12 +158,32 @@
    "fieldtype": "Int",
    "label": "Qty",
    "read_only": 1
+  },
+  {
+   "fieldname": "maintenance_schedule_item_reference",
+   "fieldtype": "Data",
+   "label": "Maintenance Schedule Item Reference",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "completion_status",
+   "fieldtype": "Select",
+   "label": "Completion Status",
+   "options": "\nPending\nPartially Completed\nFully Completed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "label": "Color",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-03 14:36:42.547481",
+ "modified": "2025-07-22 14:40:07.980042",
  "modified_by": "Administrator",
  "module": "Amc",
  "name": "Predictive Maintenance",

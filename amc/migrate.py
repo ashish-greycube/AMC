@@ -51,6 +51,14 @@ def after_migrate():
                 'allow_on_submit' : 1,
                 'options': 'TIEPL Reschedule Reason'
             },
+            {
+                'fieldname' : 'custom_sales_person_email',
+                'fieldtype' : 'Data',
+                'label' : _('Sales Person Email'),
+                'insert_after' : 'sales_person',
+                'is_custom_field' : 1,
+                'is_system_generated' : 0,
+            },
         ],
 
         "Maintenance Schedule Item" : [
@@ -92,7 +100,18 @@ def after_migrate():
                 'is_custom_field': 1,
                 'options' : 'Branch',
                 'insert_after' : 'transaction_date'
-            }
+            },
+             {
+                'fieldname' : 'custom_sp_email',
+                'fieldtype' : 'Data',
+                'label' : _('Sales Person Email'),
+                'insert_after' : 'sales_order_cf',
+                'is_custom_field' : 1,
+                'is_system_generated' : 0,
+                'read_only' : 1,
+                'hidden' : 1,
+                'options' : 'Email'
+            },
         ],
 
         "Maintenance Visit" : [

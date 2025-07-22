@@ -5,11 +5,6 @@ def create_docs_on_submit(self, method=None):
     schedules_list = self.schedules
     if len(schedules_list) > 0:
         for schedule in schedules_list:
-            sp_email = ""
-            employee_id = frappe.db.get_value('Sales Person', schedule.sales_person, 'employee')
-            if employee_id != None:
-                sp_email = frappe.db.get_value('Employee', employee_id, 'prefered_email')
-
             sd_doc = frappe.new_doc('Predictive Maintenance')
             sd_doc.item_code = schedule.item_code
             sd_doc.item_name = schedule.item_name
@@ -26,8 +21,9 @@ def create_docs_on_submit(self, method=None):
             sd_doc.contact_email = self.contact_email
             sd_doc.sales_order_reference = self.sales_order_cf
             sd_doc.maintenance_schedule_reference = self.name
-            sd_doc.sales_person_email = sp_email
+            sd_doc.sales_person_email = schedule.custom_sales_person_email
             sd_doc.qty = schedule.qty
+            sd_doc.maintenance_schedule_item_reference = schedule.name
             sd_doc.insert(ignore_permissions=True)
         
             frappe.db.set_value('Maintenance Schedule Detail', schedule.name, 'custom_amc_schedule_reference', sd_doc.name)
@@ -105,9 +101,35 @@ def set_qty_in_ms_schedule(self, method=None):
                 if schedule.item_code == item.item_code:
                     if schedule.qty == 0:
                         schedule.qty = item.qty
+    
+    # Set Sales Person Email
+    if len(self.schedules) > 0:
+        for row in self.schedules:
+            sp = row.sales_person
+            employee_id = frappe.db.get_value('Sales Person', sp, 'employee')
+            sp_email = ""
+            if employee_id != None:
+                sp_email = frappe.db.get_value('Employee', employee_id, 'prefered_email')
+            row.custom_sales_person_email = sp_email
+    
+    if len(self.schedules) > 0:
+        email = self.schedules[0].custom_sales_person_email
+        self.custom_sp_email = email
+
 
 @frappe.whitelist()
-def update_predictive_data_after_submit(doctype, docname, predictive_doc, reschedule_reason, updated_schedule_date, updated_scheduled_end_date,  item_code, branch, parent):
+def update_predictive_data_after_submit(doctype, docname, predictive_doc, reschedule_reason, updated_schedule_date, updated_scheduled_end_date,  item_code, branch, parent, idx):
+    # Validating Dates:
+    maintenance_doc = frappe.get_doc("Maintenance Schedule", parent)
+    current_ms_item = maintenance_doc.items[int(idx) - 1]
+
+    if frappe.utils.getdate(updated_schedule_date) < current_ms_item.start_date or frappe.utils.getdate(updated_schedule_date) > current_ms_item.end_date:
+        frappe.throw("Schedule start date is beyond the assigned quarter for item {0}".format(item_code))
+
+    if frappe.utils.getdate(updated_scheduled_end_date) > current_ms_item.end_date or frappe.utils.getdate(updated_scheduled_end_date) < current_ms_item.start_date:
+        frappe.throw("Schedule end date is beyond the assigned quarter for item {0}".format(item_code))
+
+    
     # Check For Equipement Validation
     current_allowed_occurance = frappe.db.get_value(
                                             doctype = "Branch Wise Equipment Occurrence", 
@@ -188,3 +210,46 @@ def update_contact_in_pm(parent, new_contact_person, new_contact_phone, new_cont
             frappe.db.set_value('Predictive Maintenance', docname, 'contact_person', new_contact_person)
             frappe.db.set_value('Predictive Maintenance', docname, 'mobile_no', new_contact_phone)
             frappe.db.set_value('Predictive Maintenance', docname, 'contact_email', new_contact_email)
+
+#Final Changes---------------------------------------------
+def validate_dates_of_schedule_table(self, method=None):
+    item_table = self.items
+    schedule_table = self.schedules
+    if len(schedule_table) > 0:
+        for item in item_table:
+            item_name = item.item_code
+            start = item.start_date
+            end = item.end_date
+
+            for scitem in schedule_table:
+                scitem_name = scitem.item_code
+                scstart_date = scitem.scheduled_date
+                scend_date = scitem.custom_scheduled_end_date
+                if scstart_date != None and scend_date != None:
+                    if item_name == scitem_name and item.idx == scitem.idx:
+                        if scstart_date < start or scstart_date > end:
+                            frappe.throw("Schedule start date is beyond the assigned quarter for item {0}".format(scitem_name))
+
+                        if scend_date > end or scend_date < start:
+                            frappe.throw("Schedule end date is beyond the assigned quarter for item {0}".format(scitem_name))
+
+def update_status_on_submit_of_mv(self, method=None):
+    status = self.completion_status
+    print()
+    schedule_item_reference = self.purposes[0].maintenance_schedule_detail
+    predictive_doc = frappe.get_doc("Predictive Maintenance", {'maintenance_schedule_item_reference': schedule_item_reference})
+    print(predictive_doc.name)
+    if predictive_doc != None:
+        # frappe.db.set_value("Predictive Maintenance", predictive_doc, 'completion_status', status)
+        predictive_doc.completion_status = status
+        # Set Color For Calendar View
+        if status == "Partially Completed":
+            predictive_doc.color = '#fff200'
+            # frappe.db.set_value("Predictive Maintenance", predictive_doc.name, 'color', '#fff200')
+        elif status == "Fully Completed":
+            predictive_doc.color = '#29CD42'
+            # frappe.db.set_value("Predictive Maintenance", predictive_doc.name, 'color', '#29CD42')
+        else:
+            predictive_doc.color = '#449CF0'
+            # frappe.db.set_value("Predictive Maintenance", predictive_doc.name, 'color', '#449CF0')
+        predictive_doc.save()
