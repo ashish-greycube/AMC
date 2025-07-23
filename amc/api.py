@@ -26,7 +26,10 @@ def create_docs_on_submit(self, method=None):
             sd_doc.maintenance_schedule_item_reference = schedule.name
             sd_doc.insert(ignore_permissions=True)
         
-            frappe.db.set_value('Maintenance Schedule Detail', schedule.name, 'custom_amc_schedule_reference', sd_doc.name)
+            # frappe.db.set_value('Maintenance Schedule Detail', schedule.name, 'custom_amc_schedule_reference', sd_doc.name)
+            schedule_doc = frappe.get_doc('Maintenance Schedule Detail', schedule.name)
+            schedule_doc.custom_amc_schedule_reference = sd_doc.name
+            schedule_doc.save(ignore_permissions=True)
 
 # Function that deletes Predictive Maintenance on cancel of Maintenance Schedule
 def delete_docs_on_cancel(self, method=None):

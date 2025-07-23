@@ -22,6 +22,7 @@ def after_migrate():
                 'insert_after' : 'item_reference',
                 'is_system_generated' : 0,
                 'is_custom_field': 1,
+                'allow_on_submit': 1,
                 'read_only': 1,
             },
             {
