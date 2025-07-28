@@ -148,7 +148,8 @@ doc_events = {
 	},
         "Maintenance Visit" : {
             'validate' :  "amc.api.set_sales_order_in_ms_visit",
-            'on_submit' : "amc.api.update_status_on_submit_of_mv"
+            'on_submit' : "amc.api.update_status_on_submit_of_mv",
+            'on_cancel' : "amc.api.update_status_on_cancel_of_mv",
         }
 }
 

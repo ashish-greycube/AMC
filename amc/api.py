@@ -256,3 +256,12 @@ def update_status_on_submit_of_mv(self, method=None):
             predictive_doc.color = '#449CF0'
             # frappe.db.set_value("Predictive Maintenance", predictive_doc.name, 'color', '#449CF0')
         predictive_doc.save()
+
+def update_status_on_cancel_of_mv(self, method=None):
+    status = "Pending"
+    schedule_item_reference = self.purposes[0].maintenance_schedule_detail
+    predictive_doc = frappe.get_doc("Predictive Maintenance", {'maintenance_schedule_item_reference': schedule_item_reference})
+    if predictive_doc != None:
+        predictive_doc.completion_status = status
+        predictive_doc.color = '#449CF0'
+        predictive_doc.save()
