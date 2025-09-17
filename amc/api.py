@@ -124,7 +124,9 @@ def set_qty_in_ms_schedule(self, method=None):
 def update_predictive_data_after_submit(doctype, docname, predictive_doc, reschedule_reason, updated_schedule_date, updated_scheduled_end_date,  item_code, branch, parent, idx):
     # Validating Dates:
     maintenance_doc = frappe.get_doc("Maintenance Schedule", parent)
-    current_ms_item = maintenance_doc.items[int(idx) - 1]
+    for item in maintenance_doc.items:
+        if item.name == idx:
+            current_ms_item = item
 
     if frappe.utils.getdate(updated_schedule_date) < current_ms_item.start_date or frappe.utils.getdate(updated_schedule_date) > current_ms_item.end_date:
         frappe.throw("Schedule start date is beyond the assigned quarter for item {0}".format(item_code))

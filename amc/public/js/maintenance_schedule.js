@@ -193,7 +193,7 @@ frappe.ui.form.on("Maintenance Schedule Detail", {
                             'item_code': values.item_code,
                             'branch': cur_frm.doc.custom_branch,
                             'parent': row['parent'],
-                            'idx' : row['idx']
+                            'idx' : row['item_reference']
                         },
                         callback: function (r) {
                             frm.reload_doc()
